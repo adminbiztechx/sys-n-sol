@@ -31,3 +31,5 @@ slices_products
 /*.jpg
 verify_*.png
 check_*.png
+
+.vercel

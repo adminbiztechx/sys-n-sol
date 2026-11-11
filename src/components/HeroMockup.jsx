@@ -25,7 +25,7 @@ export const HeroMockup = () => {
     {
       id: 'suite',
       tabLabel: 'Tally Suite',
-      tag: 'TALLYPRIME 5.0 LIVE',
+      tag: 'TALLYPRIME 7.2 LIVE',
       tagColor: 'bg-blue-50 text-[#0052cc] border-blue-200/80',
       title: 'TallyPrime Multi-Device Suite',
       subtitle: 'Complete accounting, inventory & business control on desktop and mobile',
