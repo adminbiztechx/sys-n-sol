@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AutoSlidingRow from '../components/AutoSlidingRow';
 import SolutionDetailModal from '../components/SolutionDetailModal';
 import {
@@ -31,8 +31,9 @@ import {
   GraduationCap
 } from 'lucide-react';
 
-export const SolutionsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }) => {
+export const SolutionsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, targetItem }) => {
   const [selectedSolution, setSelectedSolution] = useState(null);
+  const [highlightedSolutionId, setHighlightedSolutionId] = useState(null);
 
   const solutionsList = [
     {
@@ -228,6 +229,43 @@ export const SolutionsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal 
       ]
     }
   ];
+
+  // Helper to match target solution from navigation dropdown
+  const isSolutionMatch = (solution, target) => {
+    if (!target) return false;
+    const t = (typeof target === 'string' ? target : target.name || '').toLowerCase().trim();
+    if (!t) return false;
+    const sTitle = solution.title.toLowerCase();
+    const sId = solution.id.toLowerCase();
+
+    if (sTitle === t || sId === t) return true;
+    if (t.includes('cloud') && (sTitle.includes('cloud') || sId.includes('cloud'))) return true;
+    if (t.includes('gst') && (sTitle.includes('gst') || sId.includes('gst'))) return true;
+    if (t.includes('payroll') && (sTitle.includes('payroll') || sId.includes('payroll'))) return true;
+    if ((t.includes('inventory') || t.includes('optimization')) && (sTitle.includes('inventory') || sId.includes('inventory'))) return true;
+    if (t.includes('automation') && (sTitle.includes('automation') || sId.includes('automation'))) return true;
+    return false;
+  };
+
+  // When a solution is selected from the header dropdown or URL hash, scroll to it and pop/highlight it
+  useEffect(() => {
+    if (!targetItem) return;
+    const matched = solutionsList.find((s) => isSolutionMatch(s, targetItem));
+    if (matched) {
+      setHighlightedSolutionId(matched.id);
+      setTimeout(() => {
+        const el = document.getElementById(`solution-card-${matched.id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 150);
+
+      const timer = setTimeout(() => {
+        setHighlightedSolutionId(null);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [targetItem]);
 
   // Render authentic branded solution emblems matching logo themes & rich gradients
   const renderSolutionIcon = (id, iconBoxBg, FallbackIcon) => {
@@ -443,14 +481,28 @@ export const SolutionsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal 
 
   // Reusable card renderer with rich gradient borders, ambient glow & micro-animations
   const renderSolutionCard = (sol, isMobile = false) => {
+    const isHighlighted = highlightedSolutionId === sol.id;
     return (
       <div
         key={sol.id}
+        id={`solution-card-${sol.id}`}
         onClick={() => handleExploreSolution(sol)}
-        className={`group relative ${sol.cardBg} rounded-2xl sm:rounded-3xl p-6 border border-slate-200/90 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1.5 ${sol.glowShadow} ${
+        className={`group relative ${sol.cardBg} rounded-2xl sm:rounded-3xl p-6 border transition-all duration-500 flex flex-col justify-between overflow-hidden cursor-pointer ${
+          isHighlighted
+            ? 'ring-4 ring-blue-500 shadow-[0_0_40px_rgba(37,99,235,0.45)] scale-105 -translate-y-2 z-20 border-blue-400 bg-blue-50/20'
+            : 'border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1.5 ' + sol.glowShadow
+        } ${
           isMobile ? 'w-[285px] sm:w-[315px] flex-shrink-0' : ''
         }`}
       >
+        {/* Pulsing indicator when highlighted */}
+        {isHighlighted && (
+          <div className="absolute top-2.5 right-2.5 z-30 animate-bounce">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider shadow-lg">
+              <Sparkles className="w-3 h-3 text-amber-300" /> Selected
+            </span>
+          </div>
+        )}
         {/* 1. Top Gradient Accent Line */}
         <div className={`absolute top-0 left-0 right-0 h-[4px] group-hover:h-[6px] bg-gradient-to-r ${sol.gradientBorder} transition-all duration-300`} />
 
@@ -964,7 +1016,7 @@ export const SolutionsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal 
       </section>
 
       {/* 2. Main "Complete Business Solutions with Tally" (8 Cards) */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section id="our-solutions-section" className="py-16 sm:py-20 bg-white">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">

@@ -5,37 +5,7 @@ import { Calendar, ChevronDown, Menu, X, PhoneCall } from 'lucide-react';
 export const Navbar = ({ currentPage = 'home', onNavigate, onOpenDemoModal, onOpenContactModal }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(null);
   const [expandedMobileDrawerItem, setExpandedMobileDrawerItem] = useState(null);
-
-  const mobileNavRef = useRef(null);
-  const activeTabRef = useRef(null);
-
-  // Auto-scroll active tab into view in small screen horizontal navigation strip
-  useEffect(() => {
-    if (activeTabRef.current) {
-      activeTabRef.current.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'center',
-        block: 'nearest',
-      });
-    }
-  }, [currentPage]);
-
-  // Close small screen dropdown on outside click
-  useEffect(() => {
-    const handleDocumentClick = (e) => {
-      if (mobileNavRef.current && !mobileNavRef.current.contains(e.target)) {
-        setMobileDropdownOpen(null);
-      }
-    };
-    if (mobileDropdownOpen) {
-      document.addEventListener('click', handleDocumentClick);
-    }
-    return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  }, [mobileDropdownOpen]);
 
   const handleLinkClick = (e, target) => {
     e.preventDefault();
@@ -44,16 +14,44 @@ export const Navbar = ({ currentPage = 'home', onNavigate, onOpenDemoModal, onOp
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (target === 'services') {
       onNavigate && onNavigate('services');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        const el = document.getElementById('our-services-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
     } else if (target === 'solutions') {
       onNavigate && onNavigate('solutions');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        const el = document.getElementById('our-solutions-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
     } else if (target === 'industries') {
       onNavigate && onNavigate('industries');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        const el = document.getElementById('our-industries-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
     } else if (target === 'resources') {
       onNavigate && onNavigate('resources');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        const el = document.getElementById('our-resources-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
     } else if (target === 'about') {
       onNavigate && onNavigate('about');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -268,107 +266,6 @@ export const Navbar = ({ currentPage = 'home', onNavigate, onOpenDemoModal, onOp
           </div>
 
         </div>
-      </div>
-
-      {/* Small Screen Horizontal Navigation Bar (Exact same layout & active style as desktop image) */}
-      <div
-        ref={mobileNavRef}
-        className="lg:hidden border-t border-slate-100/90 bg-white/95 backdrop-blur-md relative"
-      >
-        <div className="overflow-x-auto scrollbar-none px-2 sm:px-4">
-          <div className="flex items-center min-w-max space-x-1 sm:space-x-2 h-11">
-            {navLinks.map((link) => {
-              const isActive = (currentPage === 'home' && link.id === 'home') ||
-                               (currentPage === 'products' && link.id === 'products') ||
-                               (currentPage === 'services' && link.id === 'services') ||
-                               (currentPage === 'solutions' && link.id === 'solutions') ||
-                               (currentPage === 'industries' && link.id === 'industries') ||
-                               (currentPage === 'resources' && link.id === 'resources') ||
-                               (currentPage === 'about' && link.id === 'about') ||
-                               (currentPage === 'contact' && link.id === 'contact');
-
-              return (
-                <div key={link.name} className="relative flex-shrink-0" ref={isActive ? activeTabRef : null}>
-                  <button
-                    onClick={(e) => {
-                      if (link.hasDropdown) {
-                        setMobileDropdownOpen(mobileDropdownOpen === link.name ? null : link.name);
-                      } else {
-                        setMobileDropdownOpen(null);
-                        handleLinkClick(e, link.id);
-                      }
-                    }}
-                    className={`inline-flex items-center gap-1 px-3 py-2 text-[13.5px] font-semibold transition-colors duration-150 relative cursor-pointer whitespace-nowrap ${
-                      isActive
-                        ? 'text-blue-600 font-bold'
-                        : 'text-slate-700 hover:text-blue-600'
-                    }`}
-                  >
-                    <span>{link.name}</span>
-                    {link.hasDropdown && (
-                      <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          mobileDropdownOpen === link.name
-                            ? 'rotate-180 text-blue-600'
-                            : isActive
-                            ? 'text-blue-600'
-                            : 'text-slate-400'
-                        }`}
-                      />
-                    )}
-                    {isActive && (
-                      <span className="absolute bottom-0 left-2.5 right-2.5 h-[2.5px] bg-blue-600 rounded-full" />
-                    )}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Small Screen Dropdown Menu Panel */}
-        {mobileDropdownOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white/98 backdrop-blur-xl border-t border-b border-slate-100 shadow-2xl px-4 py-3 max-h-[75vh] overflow-y-auto z-50">
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                {mobileDropdownOpen}
-              </span>
-              <button
-                onClick={(e) => {
-                  const link = navLinks.find((l) => l.name === mobileDropdownOpen);
-                  if (link) handleLinkClick(e, link.id);
-                  setMobileDropdownOpen(null);
-                }}
-                className="text-xs font-bold text-blue-600 hover:text-blue-700 cursor-pointer flex items-center gap-1"
-              >
-                <span>Go to {mobileDropdownOpen} Page</span>
-                <span>→</span>
-              </button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-              {navLinks
-                .find((l) => l.name === mobileDropdownOpen)
-                ?.items?.map((item) => (
-                  <button
-                    key={item.title}
-                    onClick={() => {
-                      const link = navLinks.find((l) => l.name === mobileDropdownOpen);
-                      setMobileDropdownOpen(null);
-                      if (link) onNavigate && onNavigate(link.id, item.title);
-                    }}
-                    className="w-full text-left p-2.5 rounded-lg hover:bg-blue-50/70 active:bg-blue-100/70 transition-colors cursor-pointer group"
-                  >
-                    <div className="text-xs font-bold text-slate-800 group-hover:text-blue-600">
-                      {item.title}
-                    </div>
-                    <div className="text-[11px] text-slate-500 line-clamp-1">
-                      {item.desc}
-                    </div>
-                  </button>
-                ))}
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Mobile Drawer Menu */}

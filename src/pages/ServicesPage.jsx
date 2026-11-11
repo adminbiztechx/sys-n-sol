@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AutoSlidingRow from '../components/AutoSlidingRow';
 import ServiceDetailModal from '../components/ServiceDetailModal';
 import {
@@ -33,8 +33,9 @@ import {
   Zap
 } from 'lucide-react';
 
-export const ServicesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }) => {
+export const ServicesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, targetItem }) => {
   const [selectedService, setSelectedService] = useState(null);
+  const [highlightedServiceId, setHighlightedServiceId] = useState(null);
 
   const servicesList = [
     {
@@ -398,6 +399,43 @@ export const ServicesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }
       ]
     }
   ];
+
+  // Helper to match target service from navigation dropdown
+  const isServiceMatch = (service, target) => {
+    if (!target) return false;
+    const t = (typeof target === 'string' ? target : target.name || '').toLowerCase().trim();
+    if (!t) return false;
+    const sTitle = service.title.toLowerCase();
+    const sId = service.id.toLowerCase();
+
+    if (sTitle === t || sId === t) return true;
+    if (t.includes('implementation') && (sTitle.includes('implementation') || sId.includes('implementation'))) return true;
+    if (t.includes('customization') && (sTitle.includes('customization') || sId.includes('customization'))) return true;
+    if ((t.includes('support') || t.includes('amc')) && (sTitle.includes('amc') || sId.includes('amc') || sTitle.includes('support'))) return true;
+    if (t.includes('sync') && (sTitle.includes('sync') || sId.includes('sync'))) return true;
+    if ((t.includes('training') || t.includes('upskilling')) && (sTitle.includes('training') || sId.includes('training'))) return true;
+    return false;
+  };
+
+  // When a service is selected from the header dropdown or URL hash, scroll to it and pop/highlight it
+  useEffect(() => {
+    if (!targetItem) return;
+    const matched = servicesList.find((s) => isServiceMatch(s, targetItem));
+    if (matched) {
+      setHighlightedServiceId(matched.id);
+      setTimeout(() => {
+        const el = document.getElementById(`service-card-${matched.id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 150);
+
+      const timer = setTimeout(() => {
+        setHighlightedServiceId(null);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [targetItem]);
 
   // Render high-definition authentic service emblems matching logo themes & rich gradients
   const renderServiceIcon = (id, iconBoxBg, FallbackIcon) => {
@@ -772,14 +810,28 @@ export const ServicesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }
 
   // Reusable card renderer with rich gradient borders, ambient glow & micro-animations
   const renderServiceCard = (service, isMobile = false) => {
+    const isHighlighted = highlightedServiceId === service.id;
     return (
       <div
         key={service.id}
+        id={`service-card-${service.id}`}
         onClick={() => handleLearnMore(service)}
-        className={`group relative ${service.cardBg} rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-slate-200/90 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1.5 ${service.glowShadow} ${
+        className={`group relative ${service.cardBg} rounded-2xl sm:rounded-3xl p-5 sm:p-6 border transition-all duration-500 flex flex-col justify-between overflow-hidden cursor-pointer ${
+          isHighlighted
+            ? 'ring-4 ring-blue-500 shadow-[0_0_40px_rgba(37,99,235,0.45)] scale-105 -translate-y-2 z-20 border-blue-400 bg-blue-50/20'
+            : 'border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1.5 ' + service.glowShadow
+        } ${
           isMobile ? 'w-[285px] sm:w-[315px] flex-shrink-0' : ''
         }`}
       >
+        {/* Pulsing indicator when highlighted */}
+        {isHighlighted && (
+          <div className="absolute top-2.5 right-2.5 z-30 animate-bounce">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider shadow-lg">
+              <Sparkles className="w-3 h-3 text-amber-300" /> Selected
+            </span>
+          </div>
+        )}
         {/* 1. Top Gradient Stripe */}
         <div className={`absolute top-0 left-0 right-0 h-[4px] group-hover:h-[6px] bg-gradient-to-r ${service.gradientBorder} transition-all duration-300`} />
 
@@ -1006,7 +1058,7 @@ export const ServicesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }
       </section>
 
       {/* 2. Main "Our Services" Grid Section (15 Cards) */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section id="our-services-section" className="py-16 sm:py-20 bg-white">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
@@ -1048,14 +1100,14 @@ export const ServicesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }
         </div>
       </section>
 
-      {/* 3. Why Choose Syn N Sol? Section */}
+      {/* 3. Why Choose Sys N Sol? Section */}
       <section className="pb-16 sm:pb-20 bg-white">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="bg-[#edf5ff] rounded-3xl p-8 sm:p-12 border border-blue-100/60 shadow-xs">
             {/* Heading */}
             <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0d2347] tracking-tight mb-2">
-                Why Choose Syn N Sol?
+                Why Choose Sys N Sol?
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm">
                 We deliver more than just software – we deliver peace of mind.

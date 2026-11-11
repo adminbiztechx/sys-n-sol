@@ -53,7 +53,7 @@ export const IndustryDetailModal = ({ isOpen, onClose, industry, onBookDemo, onC
             </div>
             <div>
               <span className="text-xs font-semibold tracking-wider uppercase text-blue-300">
-                Syn N Sol • Industry-Specific Tally ERP
+                Sys N Sol • Industry-Specific Tally ERP
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
                 {industry.title}

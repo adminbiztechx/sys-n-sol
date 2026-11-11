@@ -124,7 +124,7 @@ export const Footer = ({ onNavigate }) => {
               }}
               className="text-left focus:outline-none cursor-pointer"
             >
-              <BrandLogo variant="light" />
+              <BrandLogo variant="light" size="large" />
             </button>
             
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
@@ -287,8 +287,19 @@ export const Footer = ({ onNavigate }) => {
               Contact Us
             </button>
             <ul className="space-y-3 text-[11.5px] text-slate-400">
-              {/* Head Office */}
+              {/* Primary Address */}
               <li className="space-y-1">
+                <div className="text-[10px] font-bold text-blue-300 uppercase tracking-wider">Primary Address:</div>
+                <div className="flex items-start gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-blue-400 flex-shrink-0 mt-0.5" />
+                  <span className="leading-snug text-slate-300">
+                    603, 6th Floor, Ashiyana Plaza, Budh Marg, Patna - 800001
+                  </span>
+                </div>
+              </li>
+
+              {/* Head Office */}
+              <li className="space-y-1 border-t border-slate-800 pt-2">
                 <div className="text-[10px] font-bold text-blue-300 uppercase tracking-wider">Head Office:</div>
                 <div className="flex items-start gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-blue-400 flex-shrink-0 mt-0.5" />
@@ -296,7 +307,7 @@ export const Footer = ({ onNavigate }) => {
                     1st Floor, Madhuri Bhawan, Jamal Road, Patna, Bihar 800001
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 pl-5">
+                <div className="flex flex-wrap items-center gap-1.5 pl-5 pt-0.5">
                   <Phone className="w-3 h-3 text-slate-400 flex-shrink-0" />
                   <a href="tel:+919386896383" className="hover:text-white transition-colors">
                     +91-9386896383
@@ -305,22 +316,9 @@ export const Footer = ({ onNavigate }) => {
                   <a href="tel:+917004128603" className="hover:text-white transition-colors">
                     7004128603
                   </a>
-                </div>
-              </li>
-
-              {/* Branch Office */}
-              <li className="space-y-1 border-t border-slate-800 pt-2">
-                <div className="text-[10px] font-bold text-blue-300 uppercase tracking-wider">Branch Office:</div>
-                <div className="flex items-start gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-blue-400 flex-shrink-0 mt-0.5" />
-                  <span className="leading-snug text-slate-300">
-                    Kumar Apartment, Kailash Nagar, Old GT Road, Sasaram, Rohtas–821115
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 pl-5">
-                  <Phone className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                  <span>/</span>
                   <a href="tel:+919060819603" className="hover:text-white transition-colors">
-                    +91-9060819603
+                    9060819603
                   </a>
                 </div>
               </li>
@@ -337,12 +335,12 @@ export const Footer = ({ onNavigate }) => {
               <li className="flex items-center gap-1.5">
                 <MessageCircle className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                 <a
-                  href="https://wa.me/919386896383?text=Hello%20Syn%20N%20Sol,%20I%20would%20like%20to%20know%20more%20about%20your%20Tally%20solutions."
+                  href="https://wa.me/919334419603?text=Hello%20Sys%20N%20Sol,%20I%20would%20like%20to%20know%20more%20about%20your%20Tally%20solutions."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
                 >
-                  WhatsApp: +91-9386896383
+                  WhatsApp: +91-9334419603
                 </a>
               </li>
             </ul>
@@ -353,7 +351,7 @@ export const Footer = ({ onNavigate }) => {
         {/* Bottom Bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4 text-center sm:text-left">
           <div>
-            © 2025 Syn N Sol. All Rights Reserved.
+            © 2025 Sys N Sol. All Rights Reserved.
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">

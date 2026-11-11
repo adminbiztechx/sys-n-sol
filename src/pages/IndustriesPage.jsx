@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AutoSlidingRow from '../components/AutoSlidingRow';
 import IndustryDetailModal from '../components/IndustryDetailModal';
 import {
@@ -28,8 +28,9 @@ import {
   Sparkles
 } from 'lucide-react';
 
-export const IndustriesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }) => {
+export const IndustriesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, targetItem }) => {
   const [selectedIndustry, setSelectedIndustry] = useState(null);
+  const [highlightedIndustryId, setHighlightedIndustryId] = useState(null);
 
   const industriesList = [
     {
@@ -321,6 +322,66 @@ export const IndustriesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal
       ]
     }
   ];
+
+  // Helper to match target industry from navigation dropdown or URL hash
+  const isIndustryMatch = (industry, target) => {
+    if (!target) return false;
+    const t = (typeof target === 'string' ? target : target.name || '').toLowerCase().trim();
+    if (!t) return false;
+    const iTitle = industry.title.toLowerCase();
+    const iId = industry.id.toLowerCase();
+
+    // Exact or direct match
+    if (iTitle === t || iId === t) return true;
+
+    // Navbar dropdown item mappings
+    // 1. "Manufacturing & Assembly" -> manufacturing
+    if (t.includes('manufactur') && (iId.includes('manufacturing') || iTitle.includes('manufacturing'))) return true;
+
+    // 2. "Wholesale & Retail" -> wholesale-distribution or retail
+    if (t.includes('wholesale') && (iId.includes('wholesale') || iTitle.includes('wholesale'))) return true;
+    if (t.includes('retail') && (iId.includes('retail') || iTitle.includes('retail'))) return true;
+
+    // 3. "Healthcare & Pharma" -> healthcare or pharma
+    if (t.includes('health') && (iId.includes('healthcare') || iTitle.includes('healthcare'))) return true;
+    if (t.includes('pharma') && (iId.includes('pharma') || iTitle.includes('pharma'))) return true;
+
+    // 4. "Construction & Real Estate" -> construction
+    if ((t.includes('construction') || t.includes('real estate')) && (iId.includes('construction') || iTitle.includes('construction'))) return true;
+
+    // Additional industry fallbacks
+    if (t.includes('trading') && (iId.includes('trading') || iTitle.includes('trading'))) return true;
+    if (t.includes('education') && (iId.includes('education') || iTitle.includes('education'))) return true;
+    if (t.includes('hospitality') && (iId.includes('hospitality') || iTitle.includes('hospitality'))) return true;
+    if (t.includes('automobile') && (iId.includes('automobile') || iTitle.includes('automobile'))) return true;
+    if ((t.includes('ngo') || t.includes('trust')) && (iId.includes('ngos') || iTitle.includes('ngo'))) return true;
+    if ((t.includes('ca') || t.includes('audit')) && (iId.includes('ca-firms') || iTitle.includes('ca'))) return true;
+
+    return false;
+  };
+
+  // When an industry is selected from the header dropdown or URL hash, scroll to it and pop/highlight it
+  useEffect(() => {
+    if (!targetItem) return;
+    const matched = industriesList.find((ind) => isIndustryMatch(ind, targetItem));
+    if (matched) {
+      setHighlightedIndustryId(matched.id);
+      setTimeout(() => {
+        const isMobileScreen = window.innerWidth < 1024;
+        const targetEl = (isMobileScreen ? document.getElementById(`industry-card-${matched.id}-mobile`) : null)
+          || document.getElementById(`industry-card-${matched.id}`)
+          || document.getElementById('our-industries-section');
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 150);
+
+      const timer = setTimeout(() => {
+        setHighlightedIndustryId(null);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [targetItem]);
 
   // Render 3D high-definition SVG emblem with authentic logo colors and gradient grading
   const renderIndustryIcon = (id, FallbackIcon) => {
@@ -621,14 +682,29 @@ export const IndustriesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal
 
   // Reusable industry card renderer with logo gradient styling, ambient glow & micro-interactions
   const renderIndustryCard = (ind, isMobile = false) => {
+    const isHighlighted = highlightedIndustryId === ind.id;
     return (
       <div
         key={ind.id}
+        id={`industry-card-${ind.id}${isMobile ? '-mobile' : ''}`}
         onClick={() => handleIndustryClick(ind)}
-        className={`group relative ${ind.cardBg} rounded-2xl sm:rounded-3xl p-6 border border-slate-200/90 transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1.5 ${ind.glowShadow} ${
+        className={`group relative ${ind.cardBg} rounded-2xl sm:rounded-3xl p-6 border transition-all duration-500 flex flex-col justify-between overflow-hidden cursor-pointer ${
+          isHighlighted
+            ? 'ring-4 ring-blue-500 shadow-[0_0_40px_rgba(37,99,235,0.45)] scale-105 -translate-y-2 z-20 border-blue-400 bg-blue-50/20'
+            : 'border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1.5 ' + ind.glowShadow
+        } ${
           isMobile ? 'w-[285px] sm:w-[315px] flex-shrink-0' : ''
         }`}
       >
+        {/* Pulsing indicator when highlighted */}
+        {isHighlighted && (
+          <div className="absolute top-2.5 right-2.5 z-30 animate-bounce">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider shadow-lg">
+              <Sparkles className="w-3 h-3 text-amber-300" /> Selected
+            </span>
+          </div>
+        )}
+
         {/* 1. Top Gradient Accent Line */}
         <div className={`absolute top-0 left-0 right-0 h-[4px] group-hover:h-[6px] bg-gradient-to-r ${ind.gradientBorder} transition-all duration-300`} />
 
@@ -795,7 +871,7 @@ export const IndustriesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal
       </section>
 
       {/* 2. "Industries We Serve" (12 Cards Grid) */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section id="our-industries-section" className="py-16 sm:py-20 bg-white">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-14">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">

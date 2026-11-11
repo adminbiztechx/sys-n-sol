@@ -24,6 +24,7 @@ import {
   ArrowUpRight,
   Sparkles,
   ChevronRight,
+  ChevronLeft,
   Zap
 } from 'lucide-react';
 
@@ -47,6 +48,122 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
   const handleDeviceMouseLeave = () => {
     setIsDeviceHovered(false);
     setDeviceTilt({ x: 0, y: 0 });
+  };
+
+  // Hero Carousel Banners (Auto-slide every 3 seconds)
+  const heroSlides = [
+    {
+      id: 'tallyprime',
+      productId: 'tallyprime',
+      title: 'TallyPrime',
+      desc: 'Powerful Business Management Software',
+      image: '/assets/images/product-hero-tallyprime-hd.jpg',
+      badgeTop: 'Tally 5-Star Certified',
+      badgeBottom: 'TallyPrime 5.0 Ready',
+    },
+    {
+      id: 'silver',
+      productId: 'tallyprime-silver',
+      title: 'TallyPrime Silver',
+      desc: 'Single User Edition for Small Businesses',
+      image: '/assets/images/product-hero-tallyprime-silver-hd.jpg',
+      badgeTop: 'Single User License',
+      badgeBottom: 'Cost-Effective Edition',
+    },
+    {
+      id: 'gold',
+      productId: 'tallyprime-gold',
+      title: 'TallyPrime Gold',
+      desc: 'Unlimited Multi-User Enterprise Edition',
+      image: '/assets/images/product-hero-tallyprime-gold-hd.jpg',
+      badgeTop: 'Unlimited Multi-User',
+      badgeBottom: 'Enterprise-Grade Security',
+    },
+    {
+      id: 'server',
+      productId: 'tallyprime-server',
+      title: 'TallyPrime Server',
+      desc: 'High Concurrency Enterprise Data Access',
+      image: '/assets/images/product-hero-tallyprime-server-hd.jpg',
+      badgeTop: 'Enterprise Scalability',
+      badgeBottom: 'Zero Concurrency Lag',
+    },
+    {
+      id: 'cloud',
+      productId: 'tallyprime-cloud',
+      title: 'TallyPrime Cloud',
+      desc: 'Anywhere, Anytime Secure Cloud Access',
+      image: '/assets/images/product-hero-tallyprime-cloud-hd.jpg',
+      badgeTop: '99.9% Uptime SLA',
+      badgeBottom: '256-Bit Cloud Security',
+    },
+    {
+      id: 'editlog',
+      productId: 'tallyprime-edit-log',
+      title: 'TallyPrime Edit Log',
+      desc: 'Audit Compliance as per MCA Norms',
+      image: '/assets/images/product-hero-tallyprime-editlog-hd.jpg',
+      badgeTop: 'MCA Compliant',
+      badgeBottom: 'Complete Audit Trail',
+    },
+    {
+      id: 'tss',
+      productId: 'tss',
+      title: 'TSS Renewal',
+      desc: 'Software Services & Regular Updates',
+      image: '/assets/images/product-hero-tallyprime-tss-hd.jpg',
+      badgeTop: 'Latest Releases & Upgrades',
+      badgeBottom: 'Unlimited Expert Support',
+    },
+    {
+      id: 'capital',
+      productId: 'tally-capital',
+      title: 'Tally Capital',
+      desc: 'Working Capital & Business Financing',
+      image: '/assets/images/product-hero-tally-capital-hd.jpg',
+      badgeTop: 'Quick Business Loans',
+      badgeBottom: 'Backed by Trusted Partners',
+    },
+    {
+      id: 'certification',
+      productId: 'tally-certification',
+      title: 'Tally Certification',
+      desc: 'Official Examination & Skills Test',
+      image: '/assets/images/product-hero-tally-certification-hd.jpg',
+      badgeTop: 'Official Tally Certificate',
+      badgeBottom: 'Industry Recognised',
+    },
+  ];
+
+  const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
+
+  // Auto-slide every 3 seconds continuously across all 9 products
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [heroSlides.length]);
+
+  // Touch Swipe Handlers for Mobile
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > 40) {
+      setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
+    } else if (distance < -40) {
+      setCurrentHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    }
   };
 
   const tabs = [
@@ -246,6 +363,34 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
     },
   ];
 
+  // Scroll down to the corresponding product card and pop/highlight it when clicking a hero slide
+  const handleHeroSlideClick = (slide) => {
+    const targetId = slide.productId || slide.id;
+    const matched = allProducts.find(
+      (p) => p.id === targetId || isProductMatch(p, targetId) || isProductMatch(p, slide.title)
+    );
+    if (matched) {
+      if (activeTab !== 'All Products' && matched.category !== activeTab) {
+        setActiveTab('All Products');
+      }
+      setCurrentHighlightId(matched.id);
+
+      setTimeout(() => {
+        const isMobileScreen = window.innerWidth < 1024;
+        const targetEl = (isMobileScreen ? document.getElementById(`product-card-${matched.id}-mobile`) : null)
+          || document.getElementById(`product-card-${matched.id}`)
+          || document.getElementById('our-products-section');
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+
+      const timer = setTimeout(() => {
+        setCurrentHighlightId(null);
+      }, 7000);
+    }
+  };
+
   // Filter products based on active tab
   const filteredProducts = activeTab === 'All Products'
     ? allProducts
@@ -286,7 +431,10 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
       setCurrentHighlightId(matched.id);
 
       setTimeout(() => {
-        const el = document.getElementById(`product-card-${matched.id}`);
+        const isMobileScreen = window.innerWidth < 1024;
+        const el = (isMobileScreen ? document.getElementById(`product-card-${matched.id}-mobile`) : null)
+          || document.getElementById(`product-card-${matched.id}`)
+          || document.getElementById('our-products-section');
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
@@ -490,16 +638,16 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
   };
 
   // Reusable card renderer with rich gradient look, ambient glow, highlight state & animations
-  const renderProductCard = (p, isRow2 = false) => {
+  const renderProductCard = (p, isRow2 = false, isMobile = false) => {
     const isHighlighted = currentHighlightId === p.id;
 
     return (
       <div
         key={p.id}
-        id={`product-card-${p.id}`}
+        id={`product-card-${p.id}${isMobile ? '-mobile' : ''}`}
         className={`group relative bg-white rounded-2xl ${isRow2 ? 'p-5' : 'p-6'} border transition-all duration-500 flex flex-col justify-between overflow-hidden cursor-pointer ${
           isHighlighted
-            ? 'ring-4 ring-[#0052cc] ring-offset-4 ring-offset-blue-50 shadow-2xl scale-[1.03] -translate-y-2.5 z-30 border-[#0052cc]'
+            ? 'ring-4 ring-blue-500 shadow-[0_0_45px_rgba(0,82,204,0.45)] scale-105 -translate-y-2.5 z-30 border-blue-400 bg-blue-50/20'
             : `border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-2 ${p.glowShadow}`
         }`}
         onClick={() => setSelectedProduct(p)}
@@ -688,13 +836,16 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
 
             </div>
 
-            {/* Right Graphic: High Definition TallyPrime 3D Banner Showcase (Fills the available space with refined height) */}
-            <div className="lg:col-span-7 xl:col-span-8 flex justify-center lg:justify-start items-center w-full">
+            {/* Right Graphic: High Definition TallyPrime 3D Banner Showcase & Auto-sliding Carousel */}
+            <div className="lg:col-span-7 xl:col-span-8 flex justify-center lg:justify-center items-center w-full">
               <div
-                className="relative w-full max-w-[720px] xl:max-w-[790px] flex items-center justify-center select-none"
+                className="relative w-full max-w-[720px] xl:max-w-[790px] flex items-center justify-center select-none lg:translate-x-4 xl:translate-x-8 group"
                 onMouseMove={handleDeviceMouseMove}
                 onMouseEnter={handleDeviceMouseEnter}
                 onMouseLeave={handleDeviceMouseLeave}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 {/* Breathing Ambient Glow behind device */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/35 via-sky-500/25 to-indigo-600/30 blur-3xl rounded-full scale-100 animate-hero-glow pointer-events-none" />
@@ -713,33 +864,101 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
                   }
                 >
                   <div className="relative overflow-hidden rounded-2xl border border-sky-400/25 shadow-[0_20px_50px_rgba(2,12,30,0.85)] bg-[#051329]/90 backdrop-blur-xs w-full">
-                    {/* Main Image - Full Original Quality Uncompressed with Controlled Height */}
-                    <img
-                      src="/assets/images/product-hero-tallyprime-hd.jpg"
-                      alt="TallyPrime Powerful Business Management Software"
-                      className="w-full h-[240px] sm:h-[300px] lg:h-[340px] xl:h-[370px] object-cover object-center rounded-2xl relative z-10 select-none pointer-events-none"
-                      loading="eager"
-                    />
+                    
+                    {/* Carousel Track: Slides horizontally with 700ms smooth transition */}
+                    <div
+                      className="flex w-full transition-transform duration-700 ease-in-out cursor-pointer"
+                      style={{ transform: `translateX(-${currentHeroSlide * 100}%)` }}
+                    >
+                      {heroSlides.map((slide, index) => (
+                        <div
+                          key={slide.id}
+                          className="w-full flex-shrink-0 relative group/slide cursor-pointer"
+                          onClick={() => handleHeroSlideClick(slide)}
+                          title={`Click to view ${slide.title} details`}
+                        >
+                          <img
+                            src={slide.image}
+                            alt={slide.desc}
+                            className="w-full h-[240px] sm:h-[300px] lg:h-[340px] xl:h-[370px] object-cover object-center rounded-2xl relative z-10 select-none cursor-pointer transition-transform duration-300 group-hover/slide:scale-[1.01]"
+                            loading={index === 0 ? "eager" : "lazy"}
+                          />
+
+                          {/* Hover action prompt badge */}
+                          <div className="absolute top-3.5 left-3.5 z-30 opacity-0 group-hover/slide:opacity-100 transition-all duration-200 pointer-events-none">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950/85 backdrop-blur-md text-white text-xs font-bold border border-white/20 shadow-xl">
+                              <span>View {slide.title} Details</span>
+                              <ArrowUpRight className="w-3.5 h-3.5 text-sky-400" />
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
 
                     {/* Light Gleam Sweep Animation across the banner */}
                     <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden rounded-2xl">
                       <div className="w-1/2 h-[260%] -top-3/4 absolute bg-gradient-to-r from-transparent via-white/15 to-transparent animate-shine-sweep transform -skew-x-25" />
                     </div>
+
+                    {/* Navigation Arrows (Visible on hover) */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+                      }}
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 rounded-full bg-slate-900/60 hover:bg-slate-900/90 text-white/80 hover:text-white backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer shadow-lg active:scale-90"
+                      aria-label="Previous Slide"
+                    >
+                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length);
+                      }}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 p-1.5 sm:p-2 rounded-full bg-slate-900/60 hover:bg-slate-900/90 text-white/80 hover:text-white backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer shadow-lg active:scale-90"
+                      aria-label="Next Slide"
+                    >
+                      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </button>
+
+                    {/* Navigation Dots Indicator */}
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#051329]/80 backdrop-blur-md border border-white/15 shadow-md">
+                      {heroSlides.map((slide, idx) => (
+                        <button
+                          key={slide.id}
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentHeroSlide(idx);
+                          }}
+                          aria-label={`Go to ${slide.title}`}
+                          className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                            currentHeroSlide === idx
+                              ? 'w-6 bg-gradient-to-r from-sky-400 to-blue-500 shadow-sm shadow-sky-400/50'
+                              : 'w-2 bg-white/40 hover:bg-white/70'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
                   </div>
 
-                  {/* Satellite Badge 1 (Top Right) */}
-                  <div className="absolute -top-3 right-3 sm:right-6 z-30 bg-[#071938]/95 backdrop-blur-md border border-sky-400/50 text-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl shadow-xl flex items-center gap-2 text-[10px] sm:text-xs font-semibold animate-badge-float">
+                  {/* Dynamic Satellite Badge 1 (Top Right) */}
+                  <div className="absolute -top-3 right-3 sm:right-6 z-30 bg-[#071938]/95 backdrop-blur-md border border-sky-400/50 text-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl shadow-xl flex items-center gap-2 text-[10px] sm:text-xs font-semibold animate-badge-float transition-all duration-300">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                     </span>
-                    <span className="tracking-tight">Tally 5-Star Certified</span>
+                    <span className="tracking-tight">{heroSlides[currentHeroSlide].badgeTop}</span>
                   </div>
 
-                  {/* Satellite Badge 2 (Bottom Left) */}
-                  <div className="absolute -bottom-3 left-3 sm:left-6 z-30 bg-[#071938]/95 backdrop-blur-md border border-blue-400/50 text-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl shadow-xl flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-semibold animate-badge-float-delay">
+                  {/* Dynamic Satellite Badge 2 (Bottom Left) */}
+                  <div className="absolute -bottom-3 left-3 sm:left-6 z-30 bg-[#071938]/95 backdrop-blur-md border border-blue-400/50 text-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl shadow-xl flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-semibold animate-badge-float-delay transition-all duration-300">
                     <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-amber-400" />
-                    <span className="tracking-tight">TallyPrime 5.0 Ready</span>
+                    <span className="tracking-tight">{heroSlides[currentHeroSlide].badgeBottom}</span>
                   </div>
                 </div>
 
@@ -777,7 +996,7 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
       </section>
 
       {/* 3. OUR TALLY PRODUCT RANGE */}
-      <section className="py-12 sm:py-16">
+      <section id="our-products-section" className="py-12 sm:py-16">
         <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16">
           
           {/* Header */}
@@ -796,19 +1015,19 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
               <>
                 {/* Row 1: 4 Main Cards */}
                 <div className="grid grid-cols-4 gap-6 mb-7">
-                  {filteredProducts.slice(0, 4).map((p) => renderProductCard(p, false))}
+                  {filteredProducts.slice(0, 4).map((p) => renderProductCard(p, false, false))}
                 </div>
 
                 {/* Row 2: 5 Cards Grid */}
                 {filteredProducts.length > 4 && (
                   <div className="grid grid-cols-5 gap-5">
-                    {filteredProducts.slice(4).map((p) => renderProductCard(p, true))}
+                    {filteredProducts.slice(4).map((p) => renderProductCard(p, true, false))}
                   </div>
                 )}
               </>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredProducts.map((p) => renderProductCard(p, false))}
+                {filteredProducts.map((p) => renderProductCard(p, false, false))}
               </div>
             )}
           </div>
@@ -818,7 +1037,7 @@ export const ProductsPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, 
             <AutoSlidingRow speed={0.85} gap="gap-5">
               {filteredProducts.map((p) => (
                 <div key={p.id} className="w-[290px] sm:w-[320px] flex-shrink-0">
-                  {renderProductCard(p, false)}
+                  {renderProductCard(p, false, true)}
                 </div>
               ))}
             </AutoSlidingRow>

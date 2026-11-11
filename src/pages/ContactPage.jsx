@@ -190,7 +190,7 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
       cardBg: 'bg-gradient-to-b from-white via-white to-emerald-50/20',
       titleHover: 'group-hover:text-emerald-600',
       btnType: 'link',
-      btnHref: 'https://wa.me/919386896383?text=Hello%20Syn%20N%20Sol,%20I%20would%20like%20to%20know%20more%20about%20your%20Tally%20solutions.',
+      btnHref: 'https://wa.me/919334419603?text=Hello%20Sys%20N%20Sol,%20I%20would%20like%20to%20know%20more%20about%20your%20Tally%20solutions.',
       btnLabel: 'Chat on WhatsApp',
       btnIcon: MessageCircle,
       btnStyle: 'bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-300/80 hover:border-emerald-600 shadow-2xs hover:shadow-emerald-500/25',
@@ -367,24 +367,28 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-medium text-slate-500">Call Us (Patna Head Office)</div>
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <div className="text-xs font-medium text-slate-500">Call Us</div>
+                    <div className="flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1">
                       <a
                         href="tel:+919386896383"
-                        className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#0052cc] transition-colors"
+                        className="text-sm sm:text-base font-bold text-slate-900 hover:text-[#0052cc] transition-colors"
                       >
                         +91-9386896383
                       </a>
-                      <span className="text-slate-300 hidden sm:inline">|</span>
+                      <span className="text-slate-300">|</span>
                       <a
                         href="tel:+917004128603"
-                        className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#0052cc] transition-colors"
+                        className="text-sm sm:text-base font-bold text-slate-900 hover:text-[#0052cc] transition-colors"
                       >
                         +91-7004128603
                       </a>
-                    </div>
-                    <div className="text-[11px] text-slate-500 mt-1">
-                      Branch (Sasaram): <a href="tel:+919060819603" className="font-semibold text-blue-700 hover:underline">+91-9060819603</a>
+                      <span className="text-slate-300">|</span>
+                      <a
+                        href="tel:+919060819603"
+                        className="text-sm sm:text-base font-bold text-slate-900 hover:text-[#0052cc] transition-colors"
+                      >
+                        +91-9060819603
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -413,7 +417,7 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   <div>
                     <div className="text-xs font-medium text-slate-500">Working Hours</div>
                     <div className="text-base font-bold text-slate-900">
-                      Mon - Sat : 9:30 AM - 7:00 PM
+                      Mon - Sat : 10:00 AM - 7:00 PM
                     </div>
                   </div>
                 </div>
@@ -593,14 +597,14 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
               Visit Our Offices
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-2">
-              Walk in or connect directly with our Tally certified teams at our Patna Head Office or Sasaram Branch.
+              Walk in or connect directly with our Tally certified team at our Patna offices.
             </p>
           </div>
 
-          {/* Dual Offices Grid */}
+          {/* Dual Offices Grid: Card 1 Head Office, Card 2 Primary Address */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-8">
             
-            {/* Card 1: Head Office (Patna, Bihar) */}
+            {/* Card 1: Head Office (Patna - Jamal Road) */}
             <div className="bg-[#082a63] text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-lg border border-blue-900/50 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
@@ -615,7 +619,7 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                 </div>
 
                 <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight mb-4">
-                  Syn N Sol — Patna
+                  Sys N Sol — Head Office
                 </h3>
 
                 {/* Details List */}
@@ -637,10 +641,12 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                     <Phone className="w-4 h-4 text-blue-300 flex-shrink-0 mt-0.5" />
                     <div>
                       <div className="text-[11px] font-semibold text-blue-300 uppercase tracking-wider mb-0.5">Contact Numbers</div>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-slate-100 font-bold">
+                      <div className="flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1 text-slate-100 font-bold">
                         <a href="tel:+919386896383" className="hover:text-blue-300 transition-colors">+91-9386896383</a>
                         <span className="text-blue-400/60">/</span>
                         <a href="tel:+917004128603" className="hover:text-blue-300 transition-colors">+91-7004128603</a>
+                        <span className="text-blue-400/60">/</span>
+                        <a href="tel:+919060819603" className="hover:text-blue-300 transition-colors">+91-9060819603</a>
                       </div>
                     </div>
                   </div>
@@ -661,7 +667,7 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                     <Clock className="w-4 h-4 text-blue-300 flex-shrink-0 mt-0.5" />
                     <div>
                       <div className="text-[11px] font-semibold text-blue-300 uppercase tracking-wider mb-0.5">Office Hours</div>
-                      <div className="text-slate-200">Mon – Sat: 9:30 AM to 7:00 PM</div>
+                      <div className="text-slate-200">Mon – Sat: 10:00 AM to 7:00 PM</div>
                     </div>
                   </div>
                 </div>
@@ -680,7 +686,7 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
                 <a
-                  href="https://wa.me/919386896383?text=Hello%20Syn%20N%20Sol%20Patna%20Office,%20I%20need%20assistance%20with%20Tally."
+                  href="https://wa.me/919334419603?text=Hello%20Sys%20N%20Sol%20Head%20Office,%20I%20need%20assistance%20with%20Tally."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md"
@@ -691,22 +697,22 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
               </div>
             </div>
 
-            {/* Card 2: Branch Office (Sasaram, Rohtas) */}
-            <div className="bg-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-md border border-slate-200/90 relative overflow-hidden group transition-all">
-              <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none"></div>
+            {/* Card 2: Primary Address (Patna - Ashiyana Plaza) */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-md border border-slate-200 hover:shadow-xl hover:border-blue-300 transition-all duration-300 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500"></div>
 
               <div>
                 {/* Header Badge */}
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold tracking-wide uppercase border border-emerald-200">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    Branch Office
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-[#0052cc] text-xs font-bold tracking-wide uppercase border border-blue-200">
+                    <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
+                    Primary Address
                   </span>
-                  <span className="text-xs text-slate-500 font-medium">Sasaram, Rohtas</span>
+                  <span className="text-xs text-slate-500 font-medium">Patna, Bihar</span>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-black text-[#0a1a38] tracking-tight mb-4">
-                  Syn N Sol — Sasaram
+                <h3 className="text-xl sm:text-2xl font-black text-[#0a1a38] tracking-tight mb-4 group-hover:text-[#0052cc] transition-colors">
+                  Sys N Sol — Primary Office
                 </h3>
 
                 {/* Details List */}
@@ -715,10 +721,10 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   <div className="flex items-start gap-3">
                     <MapPin className="w-4 h-4 text-[#0052cc] flex-shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-0.5">Office Address</div>
-                      <p className="text-slate-800 leading-relaxed font-medium">
-                        Kumar Apartment, Kailash Nagar,<br />
-                        Old GT Road, Sasaram, Rohtas – 821115
+                      <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Primary Office Address</div>
+                      <p className="text-slate-800 leading-relaxed font-semibold">
+                        603, 6th Floor, Ashiyana Plaza, Budh Marg,<br />
+                        Patna, Bihar – 800001
                       </p>
                     </div>
                   </div>
@@ -727,8 +733,12 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   <div className="flex items-start gap-3">
                     <Phone className="w-4 h-4 text-[#0052cc] flex-shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-0.5">Contact Number</div>
-                      <div className="text-slate-900 font-bold">
+                      <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Contact Numbers</div>
+                      <div className="flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1 text-slate-800 font-bold">
+                        <a href="tel:+919386896383" className="hover:text-[#0052cc] transition-colors">+91-9386896383</a>
+                        <span className="text-slate-300">/</span>
+                        <a href="tel:+917004128603" className="hover:text-[#0052cc] transition-colors">+91-7004128603</a>
+                        <span className="text-slate-300">/</span>
                         <a href="tel:+919060819603" className="hover:text-[#0052cc] transition-colors">+91-9060819603</a>
                       </div>
                     </div>
@@ -738,8 +748,8 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   <div className="flex items-start gap-3">
                     <Mail className="w-4 h-4 text-[#0052cc] flex-shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-0.5">Email Support</div>
-                      <a href="mailto:info@sysnsol.in" className="text-slate-900 font-bold hover:text-[#0052cc] transition-colors">
+                      <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Email Support</div>
+                      <a href="mailto:info@sysnsol.in" className="text-slate-800 font-bold hover:text-[#0052cc] transition-colors">
                         info@sysnsol.in
                       </a>
                     </div>
@@ -749,8 +759,8 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   <div className="flex items-start gap-3">
                     <Clock className="w-4 h-4 text-[#0052cc] flex-shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-0.5">Office Hours</div>
-                      <div className="text-slate-600">Mon – Sat: 9:30 AM to 7:00 PM</div>
+                      <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Office Hours</div>
+                      <div className="text-slate-600 font-medium">Mon – Sat: 10:00 AM to 7:00 PM</div>
                     </div>
                   </div>
                 </div>
@@ -759,7 +769,7 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
               {/* Action Buttons */}
               <div className="pt-6 mt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
                 <a
-                  href="https://maps.google.com/?q=Kumar+Apartment,+Kailash+Nagar,+Old+GT+Road,+Sasaram,+Rohtas+821115"
+                  href="https://maps.google.com/?q=603,+6th+Floor,+Ashiyana+Plaza,+Budh+Marg,+Patna,+Bihar+800001"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 inline-flex items-center justify-center gap-2 bg-[#0052cc] hover:bg-[#0043a8] text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md"
@@ -769,7 +779,7 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
                 <a
-                  href="https://wa.me/919060819603?text=Hello%20Syn%20N%20Sol%20Sasaram%20Office,%20I%20need%20assistance%20with%20Tally."
+                  href="https://wa.me/919334419603?text=Hello%20Sys%20N%20Sol%20Primary%20Office,%20I%20need%20assistance%20with%20Tally."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-md"
@@ -793,17 +803,17 @@ export const ContactPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal })
                   Serving Businesses Across Bihar, Jharkhand & Pan-India
                 </div>
                 <div className="text-xs text-slate-500 leading-snug">
-                  On-site visits available in Patna & Sasaram regions • 100% remote instant support pan-India.
+                  On-site visits & 100% remote instant support pan-India.
                 </div>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-2xs">
-                Patna Pin: 800001
+                Ashiyana Plaza: 800001
               </span>
               <span className="text-[11px] font-bold text-slate-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-2xs">
-                Sasaram Pin: 821115
+                Jamal Road: 800001
               </span>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AutoSlidingRow from '../components/AutoSlidingRow';
 import ResourceDetailModal from '../components/ResourceDetailModal';
 import {
@@ -33,8 +33,9 @@ import {
   Sparkles
 } from 'lucide-react';
 
-export const ResourcesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal }) => {
+export const ResourcesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal, targetItem }) => {
   const [selectedResource, setSelectedResource] = useState(null);
+  const [highlightedCategoryId, setHighlightedCategoryId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
@@ -221,6 +222,70 @@ export const ResourcesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal 
       arrowBtnStyle: 'bg-violet-50 text-violet-600 group-hover:bg-violet-600 group-hover:text-white',
     }
   ];
+
+  // Helper to match target category from navigation dropdown or URL hash
+  const isResourceMatch = (cat, target) => {
+    if (!target) return false;
+    const t = (typeof target === 'string' ? target : target.name || '').toLowerCase().trim();
+    if (!t) return false;
+    const cName = cat.name.toLowerCase();
+    const cId = cat.id.toLowerCase();
+    const cTag = (cat.tag || '').toLowerCase();
+
+    // Exact or direct match
+    if (cName === t || cId === t || cTag === t) return true;
+
+    // Navbar dropdown item mappings:
+    // 1. "Knowledge Base" (Tally tutorials & tips) -> tally-updates or video-tutorials
+    if (t.includes('knowledge') || t.includes('tutorial') || t.includes('tips')) {
+      if (cId === 'tally-updates' || cId === 'video-tutorials') return true;
+    }
+
+    // 2. "GST Circulars" (Latest government notifications) -> gst-updates
+    if ((t.includes('gst') || t.includes('circular')) && (cId.includes('gst') || cName.includes('gst'))) return true;
+
+    // 3. "Downloads & Tools" (Utility add-ons and drivers) -> business-automation or compliance
+    if ((t.includes('download') || t.includes('tool')) && (cId.includes('automation') || cId.includes('compliance'))) return true;
+
+    // 4. "Case Studies" (Real customer transformation stories) -> case-studies
+    if (t.includes('case') && (cId.includes('case') || cName.includes('case'))) return true;
+
+    // Direct category fallbacks
+    if (t.includes('tally') && (cId.includes('tally') || cName.includes('tally'))) return true;
+    if ((t.includes('accounting') || t.includes('finance')) && (cId.includes('accounting') || cName.includes('accounting'))) return true;
+    if (t.includes('automation') && (cId.includes('automation') || cName.includes('automation'))) return true;
+    if (t.includes('inventory') && (cId.includes('inventory') || cName.includes('inventory'))) return true;
+    if (t.includes('payroll') && (cId.includes('payroll') || cName.includes('payroll'))) return true;
+    if (t.includes('tax') && (cId.includes('tax') || cName.includes('tax'))) return true;
+    if (t.includes('compliance') && (cId.includes('compliance') || cName.includes('compliance'))) return true;
+    if (t.includes('cloud') && (cId.includes('cloud') || cName.includes('cloud'))) return true;
+    if ((t.includes('msme') || t.includes('growth')) && (cId.includes('msme') || cName.includes('msme'))) return true;
+
+    return false;
+  };
+
+  // When a resource is selected from the header dropdown or URL hash, scroll to it and pop/highlight it
+  useEffect(() => {
+    if (!targetItem) return;
+    const matched = categories.find((cat) => isResourceMatch(cat, targetItem));
+    if (matched) {
+      setHighlightedCategoryId(matched.id);
+      setTimeout(() => {
+        const isMobileScreen = window.innerWidth < 1024;
+        const targetEl = (isMobileScreen ? document.getElementById(`resource-card-${matched.id}-mobile`) : null)
+          || document.getElementById(`resource-card-${matched.id}`)
+          || document.getElementById('our-resources-section');
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 150);
+
+      const timer = setTimeout(() => {
+        setHighlightedCategoryId(null);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [targetItem]);
 
   // Custom 3D SVG emblem renderer for all 12 Resource categories
   const renderCategoryIcon = (id, FallbackIcon) => {
@@ -489,14 +554,29 @@ export const ResourcesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal 
 
   // Reusable Category Card Renderer with Logo Gradient Styling, Ambient Glow & Micro-Interactions
   const renderCategoryCard = (cat, isMobile = false) => {
+    const isHighlighted = highlightedCategoryId === cat.id;
     return (
       <div
         key={cat.id || cat.name}
+        id={`resource-card-${cat.id}${isMobile ? '-mobile' : ''}`}
         onClick={() => setSelectedResource({ title: cat.name, category: 'Category Guide', desc: `Explore detailed articles, guides, and tools related to ${cat.name}.` })}
-        className={`group relative ${cat.cardBg} rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200/90 transition-all duration-300 flex flex-col items-center text-center justify-between overflow-hidden cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-xl hover:-translate-y-1.5 ${cat.glowShadow} ${
+        className={`group relative ${cat.cardBg} rounded-2xl sm:rounded-3xl p-4 sm:p-5 border transition-all duration-500 flex flex-col items-center text-center justify-between overflow-hidden cursor-pointer ${
+          isHighlighted
+            ? 'ring-4 ring-blue-500 shadow-[0_0_40px_rgba(37,99,235,0.45)] scale-105 -translate-y-2 z-20 border-blue-400 bg-blue-50/20'
+            : 'border-slate-200/90 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-xl hover:-translate-y-1.5 ' + cat.glowShadow
+        } ${
           isMobile ? 'w-[200px] sm:w-[220px] flex-shrink-0' : ''
         }`}
       >
+        {/* Pulsing indicator when highlighted */}
+        {isHighlighted && (
+          <div className="absolute top-2 right-2 z-30 animate-bounce">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-600 text-white text-[9px] font-black uppercase tracking-wider shadow-lg">
+              <Sparkles className="w-2.5 h-2.5 text-amber-300" /> Selected
+            </span>
+          </div>
+        )}
+
         {/* 1. Top Gradient Accent Line */}
         <div className={`absolute top-0 left-0 right-0 h-[4px] group-hover:h-[5px] bg-gradient-to-r ${cat.gradientBorder} transition-all duration-300`} />
 
@@ -1071,7 +1151,7 @@ export const ResourcesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal 
               <div className="relative w-full rounded-2xl overflow-hidden border border-slate-700/70 shadow-2xl bg-slate-900 group">
                 <img
                   src="/assets/images/resources-hero-desk-hd.jpg"
-                  alt="Syn N Sol Resource Center Portal"
+                  alt="Sys N Sol Resource Center Portal"
                   className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
                   loading="eager"
                 />
@@ -1082,7 +1162,7 @@ export const ResourcesPage = ({ onNavigate, onOpenDemoModal, onOpenContactModal 
       </section>
 
       {/* 2. Explore Resources by Category (12 Badges Grid) */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section id="our-resources-section" className="py-16 sm:py-20 bg-white">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-14">
           <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-[#0052cc] text-xs font-black uppercase tracking-wider mb-3 shadow-2xs">

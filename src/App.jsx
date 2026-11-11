@@ -150,6 +150,7 @@ function App() {
             onNavigate={navigateTo}
             onOpenDemoModal={handleOpenDemo}
             onOpenContactModal={handleOpenContact}
+            targetItem={highlightedProduct}
           />
         )}
 
@@ -158,6 +159,7 @@ function App() {
             onNavigate={navigateTo}
             onOpenDemoModal={handleOpenDemo}
             onOpenContactModal={handleOpenContact}
+            targetItem={highlightedProduct}
           />
         )}
 
@@ -166,6 +168,7 @@ function App() {
             onNavigate={navigateTo}
             onOpenDemoModal={handleOpenDemo}
             onOpenContactModal={handleOpenContact}
+            targetItem={highlightedProduct}
           />
         )}
 
@@ -174,6 +177,7 @@ function App() {
             onNavigate={navigateTo}
             onOpenDemoModal={handleOpenDemo}
             onOpenContactModal={handleOpenContact}
+            targetItem={highlightedProduct}
           />
         )}
 

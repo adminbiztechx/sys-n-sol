@@ -18,8 +18,8 @@ export const FloatingWhatsApp = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const mainWhatsAppNumber = '919386896383';
-  const defaultMessage = 'Hello Syn N Sol, I would like to know more about your Tally solutions.';
+  const mainWhatsAppNumber = '919334419603';
+  const defaultMessage = 'Hello Sys N Sol, I would like to know more about your Tally solutions.';
 
   const handleOpenChat = (phone = mainWhatsAppNumber) => {
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(defaultMessage)}`;
@@ -43,7 +43,7 @@ export const FloatingWhatsApp = () => {
                 <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#25D366] border-2 border-[#075E54]"></span>
               </div>
               <div>
-                <h4 className="text-sm font-extrabold leading-tight">Syn N Sol Support</h4>
+                <h4 className="text-sm font-extrabold leading-tight">Sys N Sol Support</h4>
                 <p className="text-[11px] text-emerald-200">Typically replies within 5 mins</p>
               </div>
             </div>
@@ -61,7 +61,7 @@ export const FloatingWhatsApp = () => {
             {/* Auto Message Bubble */}
             <div className="bg-white p-3 rounded-2xl rounded-tl-none shadow-xs border border-slate-100 max-w-[85%] text-slate-800 space-y-1">
               <p className="font-semibold text-slate-900">
-                Namaste! Welcome to Syn N Sol. 👋
+                Namaste! Welcome to Sys N Sol. 👋
               </p>
               <p className="text-[11px] text-slate-600">
                 How can we help with your Tally software, licensing or cloud setup today?
@@ -71,43 +71,20 @@ export const FloatingWhatsApp = () => {
 
             {/* Quick Contact Options */}
             <div className="space-y-2 pt-1">
-              <div className="text-[10.5px] font-bold text-slate-500 uppercase tracking-wider px-1">
-                Select Office to Chat:
-              </div>
-
-              {/* Head Office (Patna) */}
               <button
-                onClick={() => handleOpenChat('919386896383')}
-                className="w-full bg-white hover:bg-emerald-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between text-left transition-all hover:border-emerald-300 group cursor-pointer"
+                onClick={() => handleOpenChat('919334419603')}
+                className="w-full bg-white hover:bg-emerald-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between text-left transition-all hover:border-emerald-300 group cursor-pointer shadow-xs"
               >
                 <div>
                   <div className="text-xs font-bold text-slate-900 group-hover:text-emerald-700">
-                    Patna Head Office
+                    Official WhatsApp Support
                   </div>
-                  <div className="text-[11px] text-slate-500">
-                    +91-9386896383 / +91-7004128603
-                  </div>
-                </div>
-                <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
-                  <Send className="w-3.5 h-3.5" />
-                </div>
-              </button>
-
-              {/* Branch Office (Sasaram) */}
-              <button
-                onClick={() => handleOpenChat('919060819603')}
-                className="w-full bg-white hover:bg-emerald-50 p-2.5 rounded-xl border border-slate-200 flex items-center justify-between text-left transition-all hover:border-emerald-300 group cursor-pointer"
-              >
-                <div>
-                  <div className="text-xs font-bold text-slate-900 group-hover:text-emerald-700">
-                    Sasaram Branch Office
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    +91-9060819603
+                  <div className="text-[11px] text-slate-500 font-medium">
+                    +91-9334419603
                   </div>
                 </div>
-                <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
-                  <Send className="w-3.5 h-3.5" />
+                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                  <Send className="w-4 h-4" />
                 </div>
               </button>
             </div>
